@@ -16,7 +16,8 @@ type DefaultProps =
   | 'position'
   | 'tickSize'
   | 'tickPadding'
-  | 'tickFormat';
+  | 'tickFormat'
+  | 'tickLabelRotation';
 
 class AxisSpec extends React.PureComponent<AxisSpecProps> {
   public static defaultProps: Pick<AxisSpecProps, DefaultProps> = {
@@ -28,6 +29,7 @@ class AxisSpec extends React.PureComponent<AxisSpecProps> {
     tickSize: 10,
     tickPadding: 10,
     tickFormat: (tick: any) => `${tick}`,
+    tickLabelRotation: 0,
   };
   public componentDidMount() {
     const { chartStore, children, ...spec } = this.props;

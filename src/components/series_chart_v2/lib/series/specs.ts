@@ -67,7 +67,7 @@ export type BarSeriesSpec = BasicSeriesSpec & {
   seriesType: 'bar';
 };
 
-export type LineSeriesSpec = BasicSeriesSpec  & {
+export type LineSeriesSpec = BasicSeriesSpec & {
   seriesType: 'line';
   curve?: CurveType;
 };
@@ -89,6 +89,7 @@ export interface AxisSpec {
   tickFormat: TickFormatter;
   /** The axis title */
   title?: string;
+  tickLabelRotation: number;
 }
 
 export type TickFormatter = (value: any) => string;
