@@ -56,11 +56,15 @@ export class Axis extends React.PureComponent<AxisProps> {
 
     if (isVertical(position)) {
       const yPos = tick.position - maxTickHeight / 2;
-      const adjustedYPos = yPos + maxTickHeight / 2;
+      const adjustedYPos = yPos + maxTickHeight;
       textProps.y = isRotated ? adjustedYPos : yPos;
 
-      console.log(`labelY: ${yPos}, adjustedY: ${adjustedYPos}, textProps.y: ${textProps.y}`);
-      textProps.align = (position === Position.Left) && !isRotated ? 'right' : 'left';
+      // TODO Need to update alignment based on rotation
+      // If % 90 == 0, rotate center; else follow alignment logic
+      if (!isRotated) {
+        textProps.align = (position === Position.Left) ? 'right' : 'left';
+      }
+
       textProps.x = position === Position.Left ? - (maxTickWidth) : tickSize + tickPadding;
       textProps.height = maxTickLabelHeight;
       textProps.width = maxTickLabelWidth;
