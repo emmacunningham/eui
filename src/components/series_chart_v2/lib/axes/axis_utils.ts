@@ -24,6 +24,8 @@ export interface AxisTicksDimensions {
   tickLabels: string[];
   maxTickWidth: number;
   maxTickHeight: number;
+  maxTickLabelWidth: number;
+  maxTickLabelHeight: number;
 }
 
 /**
@@ -119,23 +121,30 @@ function computeTickDimensions(
       });
 
       const rotatedBbox = computeRotatedLabelDimensions(bbox, tickLabelRotation);
-      // console.log('unrotatedDims: ', bbox);
-      // console.log('rotatedDims: ', rotatedBbox);
 
       return {
         width: Math.ceil(rotatedBbox.width),
         height: Math.ceil(rotatedBbox.height),
+        textWidth: Math.ceil(bbox.width),
+        textHeight: Math.ceil(bbox.height),
       };
     })
     .filter((d) => d);
+
   const maxTickWidth = max(ticksDimensions, (bbox) => bbox.width) || 0;
   const maxTickHeight = max(ticksDimensions, (bbox) => bbox.height) || 0;
+
+  const maxTickLabelWidth = max(ticksDimensions, (bbox) => bbox.textWidth) || 0;
+  const maxTickLabelHeight = max(ticksDimensions, (bbox) => bbox.textHeight) || 0;
+
   return {
     tickValues,
     tickLabels,
     ticksDimensions,
     maxTickWidth,
     maxTickHeight,
+    maxTickLabelWidth,
+    maxTickLabelHeight,
   };
 }
 

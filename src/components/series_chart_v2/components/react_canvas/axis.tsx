@@ -36,6 +36,8 @@ export class Axis extends React.PureComponent<AxisProps> {
       axisTicksDimensions: {
         maxTickHeight,
         maxTickWidth,
+        maxTickLabelWidth,
+        maxTickLabelHeight,
       },
       debug,
     } = this.props;
@@ -47,21 +49,30 @@ export class Axis extends React.PureComponent<AxisProps> {
       width: 0,
       height: 0,
       verticalAlign: 'middle',
+      rotation: tickLabelRotation,
     };
+
+    const isRotated = tickLabelRotation !== 0;
+
     if (isVertical(position)) {
-      textProps.y = tick.position - maxTickHeight / 2;
-      textProps.align = position === Position.Left ? 'right' : 'left';
+      const yPos = tick.position - maxTickHeight / 2;
+      const adjustedYPos = yPos + maxTickHeight / 2;
+      textProps.y = isRotated ? adjustedYPos : yPos;
+
+      console.log(`labelY: ${yPos}, adjustedY: ${adjustedYPos}, textProps.y: ${textProps.y}`);
+      textProps.align = (position === Position.Left) && !isRotated ? 'right' : 'left';
       textProps.x = position === Position.Left ? - (maxTickWidth) : tickSize + tickPadding;
-      textProps.height = maxTickHeight;
-      textProps.width = maxTickWidth;
+      textProps.height = maxTickLabelHeight;
+      textProps.width = maxTickLabelWidth;
     } else {
       textProps.y = position === Position.Top ? 0 : tickSize + tickPadding;
       textProps.x = tick.position - maxTickWidth / 2;
       textProps.align = 'center';
-      textProps.height = maxTickHeight;
-      textProps.width = maxTickWidth;
+      textProps.height = maxTickLabelHeight;
+      textProps.width = maxTickLabelWidth;
       textProps.verticalAlign = position === Position.Top ? 'bottom' : 'top';
     }
+
     return (
       <Group>
         {
@@ -80,7 +91,6 @@ export class Axis extends React.PureComponent<AxisProps> {
           fontSize={tickFontSize}
           fontStyle={tickFontStyle}
           text={tick.label}
-          rotation={tickLabelRotation}
         />
       </Group>
     );
