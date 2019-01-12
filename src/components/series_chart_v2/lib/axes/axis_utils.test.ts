@@ -25,7 +25,7 @@ describe('Axis computational utils', () => {
     toJSON: () => '',
   };
   const originalGetBBox = SVGElement.prototype.getBoundingClientRect;
-  beforeEach(() => SVGElement.prototype.getBoundingClientRect = function() {
+  beforeEach(() => SVGElement.prototype.getBoundingClientRect = function () {
     const text = this.textContent || 0;
     return { ...mockedRect, width: Number(text) * 10, heigh: Number(text) * 10 };
   });
@@ -41,17 +41,17 @@ describe('Axis computational utils', () => {
     axisScaleType: ScaleType.Linear,
     axisScaleDomain: [0, 1],
     ticksDimensions: [
-      { width:  0, height: 10 },
-      { width:  1, height: 10 },
-      { width:  2, height: 10 },
-      { width:  3, height: 10 },
-      { width:  4, height: 10 },
-      { width:  5, height: 10 },
-      { width:  6, height: 10 },
-      { width:  7, height: 10 },
-      { width:  8, height: 10 },
-      { width:  9, height: 10 },
-      { width:  10, height: 10 },
+      { width: 0, height: 10 },
+      { width: 1, height: 10 },
+      { width: 2, height: 10 },
+      { width: 3, height: 10 },
+      { width: 4, height: 10 },
+      { width: 5, height: 10 },
+      { width: 6, height: 10 },
+      { width: 7, height: 10 },
+      { width: 8, height: 10 },
+      { width: 9, height: 10 },
+      { width: 10, height: 10 },
     ],
     tickValues: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
     tickLabels: ['0', '0.1', '0.2', '0.3', '0.4', '0.5', '0.6', '0.7', '0.8', '0.9', '1'],
@@ -70,6 +70,7 @@ describe('Axis computational utils', () => {
     tickFormat: (value: any) => {
       return `${value}`;
     },
+    tickLabelRotation: 0,
   };
 
   const xDomain: XDomain = {
@@ -186,17 +187,17 @@ describe('Axis computational utils', () => {
       axisScaleType: ScaleType.Linear,
       axisScaleDomain: [0, 1],
       ticksDimensions: [
-        { width:  0, height: 20 },
-        { width:  1, height: 20 },
-        { width:  2, height: 20 },
-        { width:  3, height: 20 },
-        { width:  4, height: 20 },
-        { width:  5, height: 20 },
-        { width:  6, height: 20 },
-        { width:  7, height: 20 },
-        { width:  8, height: 20 },
-        { width:  9, height: 20 },
-        { width:  10, height: 20 },
+        { width: 0, height: 20 },
+        { width: 1, height: 20 },
+        { width: 2, height: 20 },
+        { width: 3, height: 20 },
+        { width: 4, height: 20 },
+        { width: 5, height: 20 },
+        { width: 6, height: 20 },
+        { width: 7, height: 20 },
+        { width: 8, height: 20 },
+        { width: 9, height: 20 },
+        { width: 10, height: 20 },
       ],
       tickValues: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
       tickLabels: ['0', '0.1', '0.2', '0.3', '0.4', '0.5', '0.6', '0.7', '0.8', '0.9', '1'],

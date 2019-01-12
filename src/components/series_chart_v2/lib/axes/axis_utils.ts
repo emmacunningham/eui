@@ -8,7 +8,7 @@ import { Dimensions, Margins } from '../utils/dimensions';
 import { Domain } from '../utils/domain';
 import { AxisId } from '../utils/ids';
 import { Scale, ScaleType } from '../utils/scales/scales';
-import { BBoxCalculator } from './bbox_calculator';
+import { BBox, BBoxCalculator } from './bbox_calculator';
 
 export interface AxisTick {
   value: number | string;
@@ -53,7 +53,13 @@ export function computeAxisTicksDimensions(
   if (!scale) {
     throw new Error(`Cannot compute scale for axis spec ${axisSpec.id}`);
   }
-  const dimensions = computeTickDimensions(scale, axisSpec.tickFormat, bboxCalculator);
+  const dimensions = computeTickDimensions(
+    scale,
+    axisSpec.tickFormat,
+    bboxCalculator,
+    axisSpec.tickLabelRotation,
+  );
+
   return {
     axisScaleDomain: xDomain.domain,
     axisScaleType: xDomain.scaleType,
@@ -82,10 +88,25 @@ export function getScaleForAxisSpec(
   }
 }
 
+function computeRotatedLabelDimensions(unrotatedDims: BBox, degreesRotation: number): BBox {
+  const { width, height } = unrotatedDims;
+
+  const radians = degreesRotation * Math.PI / 180;
+
+  const rotatedHeight = Math.abs(width * Math.sin(radians)) + Math.abs(height * Math.cos(radians));
+  const rotatedWidth = Math.abs(width * Math.cos(radians)) + Math.abs(height * Math.sin(radians));
+
+  return {
+    width: rotatedWidth,
+    height: rotatedHeight,
+  };
+}
+
 function computeTickDimensions(
   scale: Scale,
   tickFormat: TickFormatter,
   bboxCalculator: BBoxCalculator,
+  tickLabelRotation: number,
 ) {
   const tickValues = scale.ticks();
   const tickLabels = tickValues.map(tickFormat);
@@ -96,9 +117,14 @@ function computeTickDimensions(
         width: 0,
         height: 0,
       });
+
+      const rotatedBbox = computeRotatedLabelDimensions(bbox, tickLabelRotation);
+      // console.log('unrotatedDims: ', bbox);
+      // console.log('rotatedDims: ', rotatedBbox);
+
       return {
-        width: Math.ceil(bbox.width),
-        height: Math.ceil(bbox.height),
+        width: Math.ceil(rotatedBbox.width),
+        height: Math.ceil(rotatedBbox.height),
       };
     })
     .filter((d) => d);
@@ -163,7 +189,7 @@ export function getAvailableTicks(
 ) {
   const ticks = scale.ticks();
   const shift = totalGroupCount > 0 ? totalGroupCount : 1;
-  const offset = (scale.bandwidth * shift ) / 2;
+  const offset = (scale.bandwidth * shift) / 2;
   return ticks.map((tick) => {
     return {
       value: tick,
