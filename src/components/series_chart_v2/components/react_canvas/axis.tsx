@@ -54,12 +54,12 @@ export class Axis extends React.PureComponent<AxisProps> {
 
     const isRotated = tickLabelRotation !== 0;
 
-    // TODO: this assumes that tickLabelRotation will be <= 360 and >=-360;
-    // should have a transform somewhere that ensures we're doing modulo arithmetic
-    // This computes whether we need to offset the positions of the tickLabelRotation
-    const hasOffset = tickLabelRotation > 0 ? tickLabelRotation > 180 : tickLabelRotation > -180;
-
     if (isVertical(position)) {
+      // TODO: this assumes that tickLabelRotation will be <= 360 and >=-360;
+      // should have a transform somewhere that ensures we're doing modulo arithmetic
+      // This computes whether we need to offset the positions of the tickLabelRotation
+      const hasOffset = tickLabelRotation > 0 ? tickLabelRotation > 180 : tickLabelRotation > -180;
+
       const yPos = tick.position - maxTickHeight / 2;
       const adjustedYPos = yPos + maxTickHeight;
 
@@ -75,12 +75,20 @@ export class Axis extends React.PureComponent<AxisProps> {
       textProps.height = maxTickLabelHeight;
       textProps.width = maxTickLabelWidth;
     } else {
+      // TODO: this assumes that tickLabelRotation will be <= 360 and >=-360;
+      const hasOffset = tickLabelRotation > 0 ? tickLabelRotation < 180 : tickLabelRotation < -180;
+
       textProps.y = position === Position.Top ? 0 : tickSize + tickPadding;
-      textProps.x = tick.position - maxTickWidth / 2;
-      textProps.align = 'center';
+
+      const xPos = tick.position - maxTickWidth / 2;
+      textProps.x = hasOffset ? xPos + maxTickWidth : xPos;
+
+      if (!isRotated) {
+        textProps.verticalAlign = position === Position.Top ? 'bottom' : 'top';
+      }
+
       textProps.height = maxTickLabelHeight;
       textProps.width = maxTickLabelWidth;
-      textProps.verticalAlign = position === Position.Top ? 'bottom' : 'top';
     }
 
     return (
