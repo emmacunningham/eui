@@ -54,10 +54,16 @@ export class Axis extends React.PureComponent<AxisProps> {
 
     const isRotated = tickLabelRotation !== 0;
 
+    // TODO: this assumes that tickLabelRotation will be <= 360 and >=-360;
+    // should have a transform somewhere that ensures we're doing modulo arithmetic
+    // This computes whether we need to offset the Y position of the tickLabelRotation
+    const hasYOffset = tickLabelRotation > 0 ? tickLabelRotation > 180 : tickLabelRotation > -180;
+
     if (isVertical(position)) {
       const yPos = tick.position - maxTickHeight / 2;
       const adjustedYPos = yPos + maxTickHeight;
-      textProps.y = isRotated ? adjustedYPos : yPos;
+
+      textProps.y = hasYOffset ? adjustedYPos : yPos;
 
       // TODO Need to update alignment based on rotation
       // If % 90 == 0, rotate center; else follow alignment logic
